@@ -1,0 +1,27 @@
+- name: create dnsmasq config
+  template:
+    src: dnsmasq.conf.j2
+    dest: /etc/dnsmasq.conf
+    owner: dnsmasq
+    mode: 0644
+
+- name: add target machines to /etc/hosts
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '{{ item.ip }}.*'
+    line: '{{ item.ip }} {{ item.hostname }}'
+    state: present
+  loop: "{{ target_machines }}"
+  when: target_machines is defined
+
+- name: clear dhcp.leases
+  file:
+    path: /var/lib/misc/dnsmasq.leases
+    state: absent
+  tags: remove_dhcp_leases
+
+- name: restart dnsmasq
+  service:
+    name: dnsmasq
+    state: restarted
+  tags: remove_dhcp_leases

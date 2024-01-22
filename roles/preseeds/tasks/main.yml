@@ -1,0 +1,21 @@
+- name: remove old preseeds
+  file:
+    path: "{{ repos.path }}/preseeds"
+    state: absent
+
+- name: create preseeds dir
+  file:
+    path: "{{ repos.path }}/preseeds"
+    state: directory
+    owner: dnsmasq
+    mode: 0755
+
+- name: compile preseeds from `preseed.j2` + `preseeds.yml`
+  loop: "{{ preseeds | dict2items }}"
+  template:
+    dest: "{{ repos.path }}/preseeds/{{ item.key }}" 
+    src: preseed.j2
+    owner: dnsmasq
+    mode: 0644
+  vars:
+    preseed: "{{ item.value }}"

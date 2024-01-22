@@ -1,0 +1,43 @@
+- name: install rsync
+  apt:
+    pkg: rsync
+    state: latest
+
+- name: create repo dir
+  file:
+    path: "{{ dst }}"
+    state: directory
+    mode: 0755
+
+- name: create tftp dir
+  file:
+    path: "{{ tftp.path }}"
+    state: directory
+    owner: dnsmasq
+    mode: 0755
+
+- name: sync repo `dists` with ISO
+  synchronize:
+    src: "{{ src }}/dists"
+    dest: "{{ dst }}"
+    links: yes
+    mode: pull
+    recursive: yes
+
+- name: sync repo `pool` with ISO
+  synchronize:
+    src: "{{ src }}/pool"
+    dest: "{{ dst }}"
+    links: yes
+    mode: pull
+    recursive: yes
+
+- name: copy kernel & initrd
+  synchronize:
+    src: "{{ src }}/netinst/{{ item }}"
+    dest: "{{ tftp.path }}"
+    mode: pull
+  with_items:
+    - linux
+    - initrd.gz
+    - pxelinux.0

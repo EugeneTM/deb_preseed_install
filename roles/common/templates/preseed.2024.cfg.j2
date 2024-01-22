@@ -1,0 +1,180 @@
+d-i	mirror/protocol	select {{ server_type }}
+# d-i	mirror/ftp/mirror select
+d-i mirror/{{ server_type }}/hostname string {{ network.addr }}
+# d-i	mirror/ftp/directory	string	/alse/main
+d-i mirror/{{ server_type }}/directory string {% if server_type == 'http' %}/{{ repos.os }}/main{% else %}/{{ repos.os }}/main{% endif %}
+
+d-i mirror/{{ server_type }}/proxy string
+
+# d-i	preseed/url	string	tftp://10.1.2.1/se/preseed.cfg
+
+# Сбрасываем настройки от DHCP
+# d-i preseed/early_command string kill-all-dhcp; netcfg
+
+# Язык
+d-i mirror/country string manual
+d-i debian-installer/locale string ru_RU
+d-i debian-installer/locale select ru_RU.UTF-8
+d-i debian-installer/language string ru
+d-i debian-installer/country string RU
+d-i debian-installer/keymap string ru
+# Настройки клавиатуры
+d-i console-tools/archs select at
+d-i console-keymaps-at/keymap select ru
+d-i console-setup/toggle string Ctrl+Shift
+d-i console-setup/layoutcode string ru
+d-i keyboard-configuration/toggle select Ctrl+Shift
+d-i keyboard-configuration/layoutcode string ru
+d-i keyboard-configuration/xkb-keymap select ru
+d-i languagechooser/language-name-fb select Russian
+d-i countrychooser/country-name select Russia
+d-i console-cyrillic/switch select "Клавиша Menu"
+d-i console-cyrillic/toggle select Control+Shift
+
+# Сеть
+# d-i netcfg/choose_interface select auto
+d-i netcfg/link_wait_timeout string 5
+d-i netcfg/dhcp_timeout string 5
+d-i netcfg/disable_autoconfig boolean true
+
+d-i netcfg/hostname string astra77
+
+# d-i hw-detect/load_firmware boolean true
+d-i netcfg/get_nameservers string 192.168.7.1
+d-i netcfg/get_ipaddress string 10.1.2.33
+d-i netcfg/get_netmask string 255.255.255.0
+d-i netcfg/get_gateway string 10.1.2.1
+d-i netcfg/confirm_static boolean true
+
+# Разметка диска
+d-i partman-auto/disk string /dev/sda
+d-i partman-auto/method string lvm
+d-i partman-auto/purge_lvm_from_device boolean true
+d-i partman-auto-lvm/new_vg_name string vg0
+
+d-i partman/confirm_nooverwrite boolean true
+d-i partman/confirm boolean true
+d-i partman/choose_partition select finish
+
+d-i partman-md/confirm boolean true
+d-i partman-md/confirm_nooverwrite boolean true
+d-i partman-md/device_remove_md boolean true
+d-i partman-md/confirm_nochanges boolean true
+
+d-i partman-lvm/confirm boolean true
+d-i partman-lvm/vgcreate string vg0
+d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-lvm/vgdelete_confirm boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
+
+d-i partman-partitioning/confirm_write_new_label boolean true
+
+# Proceed with installation to unclean target?
+base-installer	base-installer/use_unclean_target	boolean	true
+
+# Для режима UEFI
+d-i partman-efi/non_efi_system boolean true
+
+d-i partman-auto/choose_recipe select astra_recipe
+
+d-i partman-auto/expert_recipe string astra_recipe :: \
+    200 10 200 fat32 \
+        $reusemethod{ } \
+        method{ efi }\
+        format{ } \
+    . \
+    1024 10 1024 xfs \
+        $primary{ } \
+        $bootable{ } \
+        method{ format } format{ } \
+        use_filesystem{ } filesystem{ xfs } \
+        mountpoint{ /boot } \
+    . \
+    500 100 1000 swap \
+        $defaultignore{ } \
+        $lvmok{ } \
+        lv_name{ astra-swap } \
+        method{ swap } \
+        format{ } \
+    . \
+    4096 100 -1 xfs \
+        $defaultignore{ } \
+        $lvmok{ } \
+        lv_name{ astra-root } \
+        method{ format } \
+        format{ } \
+        use_filesystem{ } \
+        filesystem{ xfs } \
+        mountpoint{ / } \
+    . \
+
+# The size entered is too small
+d-i	partman-partitioning/small_new_size	error	
+
+# Время
+d-i clock-setup/utc boolean true
+d-i time/zone string Europe/Moscow
+d-i clock-setup/ntp boolean true
+d-i clock-setup/ntp-server string 10.1.2.1
+
+# User passwords
+
+d-i passwd/root-password password {{ root.password }}
+d-i passwd/root-password-again password {{ root.password }}
+
+d-i passwd/make-user boolean true
+d-i passwd/user-fullname string {{ user.name }}
+d-i passwd/username string {{ user.login }}
+d-i passwd/user-password password {{ user.password }}
+d-i passwd/user-password-again password {{ user.password }}
+
+# Разрешение репо без GPG-ключа
+d-i debian-installer/allow_unauthenticated string true
+
+# Software
+tasksel tasksel/first multiselect Base packages, SSH server
+
+# Пустое значение
+tasksel tasksel/astra-feat-setup multiselect
+
+# Пакеты для установки. wget обязателен
+# d-i pkgsel/include string wget gdb telnet htop pigz atop lshw nmon hwinfo iftop strace sysstat tcpdump ipmitool unzip fio iperf systemtap-sdt-dev netcat libnfs-utils dnsutils chrony
+
+# Орёл
+d-i astra-additional-setup/os-check select Base security level Orel
+d-i	astra-additional-setup/additional-settings-orel	multiselect	Disable ptrace capability, Request password for sudo command
+
+astra-license astra-license/license boolean true
+astra-feat-setup astra-feat-setup/feat multiselect kiosk mode false
+astra-feat-setup astra-feat-setup/feat multiselect Служба ALD false
+
+# Misc
+popularity-contest popularity-contest/participate boolean false
+
+# GRUB
+d-i grub-installer/only_debian boolean true
+d-i grub-installer/with_other_os boolean false
+
+# Не показывать последнее сообщение о том, что установка завершена.
+d-i finish-install/reboot_in_progress note
+d-i finish-install/exit/poweroff boolean false
+
+# Late-command
+d-i preseed/late_command string \
+    in-target systemctl enable ssh ; \
+    tftp -g -r post_install.sh 10.1.2.1; \
+    mv post_install.sh /target/tmp/; \
+    in-target chmod +x /tmp/post_install.sh; \
+    in-target /tmp/post_install.sh; \
+    sh
+
+
+# d-i preseed/late_command string \
+#     in-target systemctl enable ssh.service; \
+#     mkdir --mode=700 /target/root/.ssh; \
+#     echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHU+qvUjI9SIadbK0p6/b0qisWugHoAXuAeqvXtjH1/F tvg@dv' > /target/root/.ssh/authorized_keys; \
+#     chmod 600 /target/root/.ssh/authorized_keys; \
+#     # in-target systemctl disable systemd-timesyncd.service; \
+#     # in-target systemctl enable chronyd.service; \
+#     # in-target rm -f /etc/NetworkManager/system-connections/*; \
+#     in-target sh

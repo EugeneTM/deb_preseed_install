@@ -1,0 +1,62 @@
+# Переменные для настройки сервера раздачи
+
+# Необходимость UEFI. В любом случае допускается одновременное наличие обычных и UEFI целевых машин.
+uefi: True
+
+# Имя шаблона: объект в `preseeds.yml` для генерации шаблона из `preseed.j2. Отдельные файлы из `roles/common/templates` сейчас не используются.
+
+default_preseed: 'standard'
+
+default_domain: local
+
+# Пароли для Astra не короче 8 символов
+user:
+   login: a
+   name: a
+   password: 12345678
+root:
+   password: 12345678
+grub:
+   password: 12345678
+
+# Сетевой интерфейс для DHCP
+net_iface: eth0
+
+# Параметры сети. Стандартные настройки позволяют автоматически подхватывать данные с интерфейса.
+network:
+   addr: '{{ hostvars[inventory_hostname]["ansible_" + net_iface].ipv4.address }}'
+   mask: '{{ hostvars[inventory_hostname]["ansible_" + net_iface].ipv4.netmask }}'
+   network: '{{ hostvars[inventory_hostname]["ansible_" + net_iface].ipv4.network }}'
+
+# Загрузочные файлы
+tftp:
+   path: /srv/tftp
+
+# Репозиторий по HTTP или FTP и файлы preseed
+repos:
+   # Адрес сервера с репозиторием Astra
+   host: "{{ network.addr }}"
+   # Абсолютный путь к начальному каталогу сервера
+   path: /srv/repo
+   # Относительный путь к репозиторию операционной системы
+   # TODO решить со слешем
+   os: /alse
+
+# Настройки Dnsmasq
+dhcp:
+    # true: адреса выдаются только для mac из machines_by_mac
+    static_mode: true
+    # диапазон адресов для false
+    subset: [10.1.2.100, 10.1.2.200, 255.255.255.0]
+
+# Заполнение `/etc/hosts` на сервере раздачи
+target_machines:
+  - { hostname: 'node1', ip: '172.16.0.50' }
+  - { hostname: 'node2', ip: '172.16.0.51' }
+
+# IP назначаются тут
+machines_by_mac:
+  - { mac: ["BC:24:11:8E:C5:2E"], hostname: astra1, ip: 10.1.2.240, preseed: "{{ preseeds.standard }}" }
+  - { mac: ['00:25:90:cb:03:2b', '00:25:90:cb:03:2a', '90:e2:ba:21:35:60', '90:e2:ba:21:35:61'], hostname: 'hacnode1', ip: 172.16.0.20 }
+#  - { mac: ['00:1c:c0:f8:ff:6a'], hostname: 'crimea', preseed: 'preseeds.mdraid', ip: 172.16.0.100 }
+#  - { mac: '00-1c-c0-f8-ff-6a', hostname: 'example', preseed: 'preseeds.standard', ip: 10.10.10.50, mask: 255.255.255.0 }

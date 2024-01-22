@@ -1,0 +1,26 @@
+- name: install vsftpd
+  apt:
+    pkg: vsftpd
+    state: latest
+    force: yes
+
+- name: create new root for vsftpd
+  file:
+    path: "{{ repos.path }}"
+    mode: 0555
+    owner: ftp
+    state: directory
+
+- name: set home directory for ftp
+  command: usermod -d {{ repos.path }} ftp
+
+- name: create vsftpd config
+  template:
+    src: vsftpd.conf.j2
+    dest: /etc/vsftpd.conf
+
+- name: restart vsftpd
+  service:
+    name: vsftpd
+    state: restarted
+    enabled: yes

@@ -1,0 +1,13 @@
+<Directory {{ repos.path }}>
+Options Indexes FollowSymLinks
+Allowoverride None
+</Directory>
+
+<Directory {{ tftp.path }}>
+Options Indexes FollowSymLinks
+Allowoverride None
+</Directory>
+		
+Alias /{{ server_repos }} {{ repos.path }}
+Alias /tftpboot {{ tftp.path }}
+
