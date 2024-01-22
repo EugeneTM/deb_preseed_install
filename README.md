@@ -22,6 +22,11 @@ mount /dev/sr0 /media/cdrom
 
 - `dnsmasq` не стартует: `apt remove dnsmasq-base`;
 - из BIOS нельзя загрузиться с нужной сетевой карты: загрузиться с `ipxe.iso` и загрузиться с нужной карты оттуда (см. раздел IPXE);
+- `dnsmasq-tftp: error 8 User aborted the transfer received from 10.1.777.777`: Secure Boot;
+- no free leases or rejected:
+```shell
+sudo ansible-playbook site.yml --tags=remove_dhcp_leases
+```
 - сеть не работает после установки сервера раздачи: поднять сеть. По умолчанию Astra ставится с интерфейсом `enp*`, после загрузки используются `eth*`, и `/etc/network/interfaces` пустой:
 ```shell
 auto eth0
@@ -40,7 +45,7 @@ dns-nameserver 192.168.777.777
 
 ## IPXE
 
-1. Загрузка с `[ipxe.iso](https://boot.ipxe.org/ipxe.iso)`.
+1. Загрузка с [ipxe.iso](https://boot.ipxe.org/ipxe.iso).
 2. Ctrl-B, консоль IPXE.
 3. `ifstat`: список интерфейсов, должен соответствовать списку Linux.
 4. `autoboot net[X]`.
@@ -77,4 +82,4 @@ Preseed-файл задает параметры автоматической у
 
 ## Благодарности
 
-Выражаю благодарность сотрудникам Лаборатории 50 за подготовленный репозиторий и шаблонизирование preseed-файла. [Оригинальный репозиторий](https://github.com/laboratory50/astra_preseed_install).
+Выражаю благодарность сотрудникам Лаборатории 50 за подготовленный репозиторий и шаблонизирование preseed-файла. Оригинальный репозиторий: [https://github.com/laboratory50/astra_preseed_install](https://github.com/laboratory50/astra_preseed_install).

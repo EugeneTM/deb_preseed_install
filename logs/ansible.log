@@ -1,0 +1,482 @@
+2024-01-22 14:00:32,695 p=28054 u=root |  PLAY [localhost] **********************************************************************
+2024-01-22 14:00:32,701 p=28054 u=root |  TASK [Gathering Facts] ****************************************************************
+2024-01-22 14:00:34,913 p=28054 u=root |  ok: [localhost]
+2024-01-22 14:00:34,920 p=28054 u=root |  TASK [install dnsmasq & chrony] *******************************************************
+2024-01-22 14:00:35,964 p=28054 u=root |  ok: [localhost]
+2024-01-22 14:00:35,971 p=28054 u=root |  TASK [allow crony access] *************************************************************
+2024-01-22 14:00:36,103 p=28054 u=root |  ok: [localhost]
+2024-01-22 14:00:36,110 p=28054 u=root |  TASK [restart chrony] *****************************************************************
+2024-01-22 14:00:36,430 p=28054 u=root |  changed: [localhost]
+2024-01-22 14:00:36,437 p=28054 u=root |  TASK [copy : install rsync] ***********************************************************
+2024-01-22 14:00:36,683 p=28054 u=root |  ok: [localhost]
+2024-01-22 14:00:36,689 p=28054 u=root |  TASK [copy : create repo dir] *********************************************************
+2024-01-22 14:00:36,844 p=28054 u=root |  ok: [localhost]
+2024-01-22 14:00:36,851 p=28054 u=root |  TASK [copy : create tftp dir] *********************************************************
+2024-01-22 14:00:36,938 p=28054 u=root |  ok: [localhost]
+2024-01-22 14:00:36,945 p=28054 u=root |  TASK [copy : sync repo `dists` with ISO] **********************************************
+2024-01-22 14:00:37,111 p=28054 u=root |  ok: [localhost]
+2024-01-22 14:00:37,118 p=28054 u=root |  TASK [copy : sync repo `pool` with ISO] ***********************************************
+2024-01-22 14:00:37,295 p=28054 u=root |  ok: [localhost]
+2024-01-22 14:00:37,302 p=28054 u=root |  TASK [copy : copy kernel & initrd] ****************************************************
+2024-01-22 14:00:37,415 p=28054 u=root |  ok: [localhost] => (item=linux)
+2024-01-22 14:00:37,506 p=28054 u=root |  ok: [localhost] => (item=initrd.gz)
+2024-01-22 14:00:37,597 p=28054 u=root |  ok: [localhost] => (item=pxelinux.0)
+2024-01-22 14:00:37,604 p=28054 u=root |  TASK [vsftpd : install vsftpd] ********************************************************
+2024-01-22 14:00:37,859 p=28054 u=root |  ok: [localhost]
+2024-01-22 14:00:37,866 p=28054 u=root |  TASK [vsftpd : create new root for vsftpd] ********************************************
+2024-01-22 14:00:37,973 p=28054 u=root |  ok: [localhost]
+2024-01-22 14:00:37,980 p=28054 u=root |  TASK [vsftpd : set home directory for ftp] ********************************************
+2024-01-22 14:00:38,132 p=28054 u=root |  changed: [localhost]
+2024-01-22 14:00:38,139 p=28054 u=root |  TASK [vsftpd : create vsftpd config] **************************************************
+2024-01-22 14:00:38,367 p=28054 u=root |  ok: [localhost]
+2024-01-22 14:00:38,374 p=28054 u=root |  TASK [vsftpd : restart vsftpd] ********************************************************
+2024-01-22 14:00:38,545 p=28054 u=root |  changed: [localhost]
+2024-01-22 14:00:38,551 p=28054 u=root |  TASK [preseeds : remove old preseeds] *************************************************
+2024-01-22 14:00:38,659 p=28054 u=root |  changed: [localhost]
+2024-01-22 14:00:38,666 p=28054 u=root |  TASK [preseeds : create preseeds dir] *************************************************
+2024-01-22 14:00:38,774 p=28054 u=root |  changed: [localhost]
+2024-01-22 14:00:38,781 p=28054 u=root |  TASK [preseeds : compile preseeds from `preseed.j2` + `preseeds.yml`] *****************
+2024-01-22 14:00:39,044 p=28054 u=root |  changed: [localhost] => (item={'key': 'standard', 'value': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': None, 'lvm': {'name': 'system'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 14:00:39,246 p=28054 u=root |  changed: [localhost] => (item={'key': 'mdraid', 'value': {'name': 'mdraid', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'raid', 'disk': None, 'lvm': {'name': 'vg'}, 'softraid': {'devices': ['/dev/sda', '/dev/sdb'], 'level': 1, 'partitions': [{'name': 'boot', 'mount': '/boot', 'size': '1/1', 'fs': 'ext4'}]}, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 14:00:39,253 p=28054 u=root |  TASK [dnsmasq : create dnsmasq config] ************************************************
+2024-01-22 14:00:39,440 p=28054 u=root |  changed: [localhost]
+2024-01-22 14:00:39,447 p=28054 u=root |  TASK [dnsmasq : add target machines to /etc/hosts] ************************************
+2024-01-22 14:00:39,540 p=28054 u=root |  ok: [localhost] => (item={'hostname': 'node1', 'ip': '172.16.0.50'})
+2024-01-22 14:00:39,622 p=28054 u=root |  ok: [localhost] => (item={'hostname': 'node2', 'ip': '172.16.0.51'})
+2024-01-22 14:00:39,629 p=28054 u=root |  TASK [dnsmasq : clear dhcp.leases] ****************************************************
+2024-01-22 14:00:39,719 p=28054 u=root |  changed: [localhost]
+2024-01-22 14:00:39,726 p=28054 u=root |  TASK [dnsmasq : restart dnsmasq] ******************************************************
+2024-01-22 14:00:39,959 p=28054 u=root |  changed: [localhost]
+2024-01-22 14:00:39,966 p=28054 u=root |  TASK [pxe : install syslinux-efi] *****************************************************
+2024-01-22 14:00:40,219 p=28054 u=root |  ok: [localhost]
+2024-01-22 14:00:40,227 p=28054 u=root |  TASK [pxe : copying boot files] *******************************************************
+2024-01-22 14:00:40,468 p=28054 u=root |  ok: [localhost] => (item=/usr/lib/SYSLINUX.EFI/efi64/syslinux.efi)
+2024-01-22 14:00:40,693 p=28054 u=root |  ok: [localhost] => (item=/usr/lib/syslinux/modules/efi64/ldlinux.e64)
+2024-01-22 14:00:40,700 p=28054 u=root |  TASK [pxe : remove old PXELinux configs] **********************************************
+2024-01-22 14:00:40,793 p=28054 u=root |  changed: [localhost]
+2024-01-22 14:00:40,800 p=28054 u=root |  TASK [pxe : create directory for PXELinux configs] ************************************
+2024-01-22 14:00:40,891 p=28054 u=root |  changed: [localhost]
+2024-01-22 14:00:40,898 p=28054 u=root |  TASK [pxe : create default PXELinux config] *******************************************
+2024-01-22 14:00:40,906 p=28054 u=root |  skipping: [localhost]
+2024-01-22 14:00:40,913 p=28054 u=root |  TASK [pxe : create PXELinux configs] **************************************************
+2024-01-22 14:00:41,110 p=28054 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:8E:C5:2E'], 'hostname': 'astra1', 'ip': '10.1.2.240', 'preseed': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': None, 'lvm': {'name': 'system'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 14:00:41,291 p=28054 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:E5:26:80'], 'hostname': 'astra2', 'ip': '10.1.2.241', 'preseed': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': None, 'lvm': {'name': 'system'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 14:00:41,474 p=28054 u=root |  changed: [localhost] => (item={'mac': ['00:25:90:cb:03:2b', '00:25:90:cb:03:2a', '90:e2:ba:21:35:60', '90:e2:ba:21:35:61'], 'hostname': 'hacnode1', 'ip': '172.16.0.20'})
+2024-01-22 14:00:41,476 p=28054 u=root |  PLAY RECAP ****************************************************************************
+2024-01-22 14:00:41,476 p=28054 u=root |  localhost                  : ok=27   changed=12   unreachable=0    failed=0   
+2024-01-22 14:06:18,435 p=29475 u=root |  PLAY [localhost] **********************************************************************
+2024-01-22 14:06:18,441 p=29475 u=root |  TASK [Gathering Facts] ****************************************************************
+2024-01-22 14:06:20,682 p=29475 u=root |  ok: [localhost]
+2024-01-22 14:06:20,689 p=29475 u=root |  TASK [install dnsmasq & chrony] *******************************************************
+2024-01-22 14:06:21,532 p=29475 u=root |  ok: [localhost]
+2024-01-22 14:06:21,538 p=29475 u=root |  TASK [allow crony access] *************************************************************
+2024-01-22 14:06:21,669 p=29475 u=root |  ok: [localhost]
+2024-01-22 14:06:21,676 p=29475 u=root |  TASK [restart chrony] *****************************************************************
+2024-01-22 14:06:21,987 p=29475 u=root |  changed: [localhost]
+2024-01-22 14:06:21,994 p=29475 u=root |  TASK [copy : install rsync] ***********************************************************
+2024-01-22 14:06:22,238 p=29475 u=root |  ok: [localhost]
+2024-01-22 14:06:22,245 p=29475 u=root |  TASK [copy : create repo dir] *********************************************************
+2024-01-22 14:06:22,401 p=29475 u=root |  ok: [localhost]
+2024-01-22 14:06:22,409 p=29475 u=root |  TASK [copy : create tftp dir] *********************************************************
+2024-01-22 14:06:22,506 p=29475 u=root |  ok: [localhost]
+2024-01-22 14:06:22,513 p=29475 u=root |  TASK [copy : sync repo `dists` with ISO] **********************************************
+2024-01-22 14:06:22,682 p=29475 u=root |  ok: [localhost]
+2024-01-22 14:06:22,689 p=29475 u=root |  TASK [copy : sync repo `pool` with ISO] ***********************************************
+2024-01-22 14:06:22,876 p=29475 u=root |  ok: [localhost]
+2024-01-22 14:06:22,882 p=29475 u=root |  TASK [copy : copy kernel & initrd] ****************************************************
+2024-01-22 14:06:22,991 p=29475 u=root |  ok: [localhost] => (item=linux)
+2024-01-22 14:06:23,087 p=29475 u=root |  ok: [localhost] => (item=initrd.gz)
+2024-01-22 14:06:23,177 p=29475 u=root |  ok: [localhost] => (item=pxelinux.0)
+2024-01-22 14:06:23,184 p=29475 u=root |  TASK [vsftpd : install vsftpd] ********************************************************
+2024-01-22 14:06:23,432 p=29475 u=root |  ok: [localhost]
+2024-01-22 14:06:23,438 p=29475 u=root |  TASK [vsftpd : create new root for vsftpd] ********************************************
+2024-01-22 14:06:23,552 p=29475 u=root |  ok: [localhost]
+2024-01-22 14:06:23,559 p=29475 u=root |  TASK [vsftpd : set home directory for ftp] ********************************************
+2024-01-22 14:06:23,712 p=29475 u=root |  changed: [localhost]
+2024-01-22 14:06:23,719 p=29475 u=root |  TASK [vsftpd : create vsftpd config] **************************************************
+2024-01-22 14:06:23,943 p=29475 u=root |  ok: [localhost]
+2024-01-22 14:06:23,950 p=29475 u=root |  TASK [vsftpd : restart vsftpd] ********************************************************
+2024-01-22 14:06:24,123 p=29475 u=root |  changed: [localhost]
+2024-01-22 14:06:24,130 p=29475 u=root |  TASK [preseeds : remove old preseeds] *************************************************
+2024-01-22 14:06:24,239 p=29475 u=root |  changed: [localhost]
+2024-01-22 14:06:24,246 p=29475 u=root |  TASK [preseeds : create preseeds dir] *************************************************
+2024-01-22 14:06:24,359 p=29475 u=root |  changed: [localhost]
+2024-01-22 14:06:24,366 p=29475 u=root |  TASK [preseeds : compile preseeds from `preseed.j2` + `preseeds.yml`] *****************
+2024-01-22 14:06:24,629 p=29475 u=root |  changed: [localhost] => (item={'key': 'standard', 'value': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'system'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 14:06:24,837 p=29475 u=root |  changed: [localhost] => (item={'key': 'mdraid', 'value': {'name': 'mdraid', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'raid', 'disk': None, 'lvm': {'name': 'vg'}, 'softraid': {'devices': ['/dev/sda', '/dev/sdb'], 'level': 1, 'partitions': [{'name': 'boot', 'mount': '/boot', 'size': '1/1', 'fs': 'ext4'}]}, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 14:06:24,844 p=29475 u=root |  TASK [dnsmasq : create dnsmasq config] ************************************************
+2024-01-22 14:06:25,032 p=29475 u=root |  ok: [localhost]
+2024-01-22 14:06:25,039 p=29475 u=root |  TASK [dnsmasq : add target machines to /etc/hosts] ************************************
+2024-01-22 14:06:25,138 p=29475 u=root |  ok: [localhost] => (item={'hostname': 'node1', 'ip': '172.16.0.50'})
+2024-01-22 14:06:25,222 p=29475 u=root |  ok: [localhost] => (item={'hostname': 'node2', 'ip': '172.16.0.51'})
+2024-01-22 14:06:25,229 p=29475 u=root |  TASK [dnsmasq : clear dhcp.leases] ****************************************************
+2024-01-22 14:06:25,318 p=29475 u=root |  changed: [localhost]
+2024-01-22 14:06:25,324 p=29475 u=root |  TASK [dnsmasq : restart dnsmasq] ******************************************************
+2024-01-22 14:06:25,552 p=29475 u=root |  changed: [localhost]
+2024-01-22 14:06:25,559 p=29475 u=root |  TASK [pxe : install syslinux-efi] *****************************************************
+2024-01-22 14:06:25,815 p=29475 u=root |  ok: [localhost]
+2024-01-22 14:06:25,822 p=29475 u=root |  TASK [pxe : copying boot files] *******************************************************
+2024-01-22 14:06:26,056 p=29475 u=root |  ok: [localhost] => (item=/usr/lib/SYSLINUX.EFI/efi64/syslinux.efi)
+2024-01-22 14:06:26,281 p=29475 u=root |  ok: [localhost] => (item=/usr/lib/syslinux/modules/efi64/ldlinux.e64)
+2024-01-22 14:06:26,287 p=29475 u=root |  TASK [pxe : remove old PXELinux configs] **********************************************
+2024-01-22 14:06:26,380 p=29475 u=root |  changed: [localhost]
+2024-01-22 14:06:26,387 p=29475 u=root |  TASK [pxe : create directory for PXELinux configs] ************************************
+2024-01-22 14:06:26,481 p=29475 u=root |  changed: [localhost]
+2024-01-22 14:06:26,488 p=29475 u=root |  TASK [pxe : create default PXELinux config] *******************************************
+2024-01-22 14:06:26,496 p=29475 u=root |  skipping: [localhost]
+2024-01-22 14:06:26,503 p=29475 u=root |  TASK [pxe : create PXELinux configs] **************************************************
+2024-01-22 14:06:26,699 p=29475 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:8E:C5:2E'], 'hostname': 'astra1', 'ip': '10.1.2.240', 'preseed': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'system'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 14:06:26,879 p=29475 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:E5:26:80'], 'hostname': 'astra2', 'ip': '10.1.2.241', 'preseed': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'system'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 14:06:27,055 p=29475 u=root |  changed: [localhost] => (item={'mac': ['00:25:90:cb:03:2b', '00:25:90:cb:03:2a', '90:e2:ba:21:35:60', '90:e2:ba:21:35:61'], 'hostname': 'hacnode1', 'ip': '172.16.0.20'})
+2024-01-22 14:06:27,057 p=29475 u=root |  PLAY RECAP ****************************************************************************
+2024-01-22 14:06:27,057 p=29475 u=root |  localhost                  : ok=27   changed=11   unreachable=0    failed=0   
+2024-01-22 15:31:31,811 p=32470 u=root |  PLAY [localhost] *************************************************************************************************
+2024-01-22 15:31:31,816 p=32470 u=root |  TASK [Gathering Facts] *******************************************************************************************
+2024-01-22 15:31:34,048 p=32470 u=root |  ok: [localhost]
+2024-01-22 15:31:34,055 p=32470 u=root |  TASK [install dnsmasq & chrony] **********************************************************************************
+2024-01-22 15:31:35,014 p=32470 u=root |  ok: [localhost]
+2024-01-22 15:31:35,020 p=32470 u=root |  TASK [allow crony access] ****************************************************************************************
+2024-01-22 15:31:35,149 p=32470 u=root |  ok: [localhost]
+2024-01-22 15:31:35,156 p=32470 u=root |  TASK [restart chrony] ********************************************************************************************
+2024-01-22 15:31:35,465 p=32470 u=root |  changed: [localhost]
+2024-01-22 15:31:35,474 p=32470 u=root |  TASK [copy : install rsync] **************************************************************************************
+2024-01-22 15:31:35,722 p=32470 u=root |  ok: [localhost]
+2024-01-22 15:31:35,728 p=32470 u=root |  TASK [copy : create repo dir] ************************************************************************************
+2024-01-22 15:31:35,882 p=32470 u=root |  ok: [localhost]
+2024-01-22 15:31:35,889 p=32470 u=root |  TASK [copy : create tftp dir] ************************************************************************************
+2024-01-22 15:31:35,978 p=32470 u=root |  ok: [localhost]
+2024-01-22 15:31:35,985 p=32470 u=root |  TASK [copy : sync repo `dists` with ISO] *************************************************************************
+2024-01-22 15:31:36,154 p=32470 u=root |  ok: [localhost]
+2024-01-22 15:31:36,161 p=32470 u=root |  TASK [copy : sync repo `pool` with ISO] **************************************************************************
+2024-01-22 15:31:36,342 p=32470 u=root |  ok: [localhost]
+2024-01-22 15:31:36,349 p=32470 u=root |  TASK [copy : copy kernel & initrd] *******************************************************************************
+2024-01-22 15:31:36,458 p=32470 u=root |  ok: [localhost] => (item=linux)
+2024-01-22 15:31:36,549 p=32470 u=root |  ok: [localhost] => (item=initrd.gz)
+2024-01-22 15:31:36,644 p=32470 u=root |  ok: [localhost] => (item=pxelinux.0)
+2024-01-22 15:31:36,651 p=32470 u=root |  TASK [vsftpd : install vsftpd] ***********************************************************************************
+2024-01-22 15:31:36,896 p=32470 u=root |  ok: [localhost]
+2024-01-22 15:31:36,903 p=32470 u=root |  TASK [vsftpd : create new root for vsftpd] ***********************************************************************
+2024-01-22 15:31:37,019 p=32470 u=root |  ok: [localhost]
+2024-01-22 15:31:37,027 p=32470 u=root |  TASK [vsftpd : set home directory for ftp] ***********************************************************************
+2024-01-22 15:31:37,175 p=32470 u=root |  changed: [localhost]
+2024-01-22 15:31:37,182 p=32470 u=root |  TASK [vsftpd : create vsftpd config] *****************************************************************************
+2024-01-22 15:31:37,404 p=32470 u=root |  ok: [localhost]
+2024-01-22 15:31:37,411 p=32470 u=root |  TASK [vsftpd : restart vsftpd] ***********************************************************************************
+2024-01-22 15:31:37,579 p=32470 u=root |  changed: [localhost]
+2024-01-22 15:31:37,586 p=32470 u=root |  TASK [preseeds : remove old preseeds] ****************************************************************************
+2024-01-22 15:31:37,695 p=32470 u=root |  changed: [localhost]
+2024-01-22 15:31:37,702 p=32470 u=root |  TASK [preseeds : create preseeds dir] ****************************************************************************
+2024-01-22 15:31:37,810 p=32470 u=root |  changed: [localhost]
+2024-01-22 15:31:37,817 p=32470 u=root |  TASK [preseeds : compile preseeds from `preseed.j2` + `preseeds.yml`] ********************************************
+2024-01-22 15:31:38,079 p=32470 u=root |  changed: [localhost] => (item={'key': 'standard', 'value': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'gateway': '10.1.2.2', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:31:38,287 p=32470 u=root |  changed: [localhost] => (item={'key': 'lvm', 'value': {'name': 'lvm', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'lvm', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:31:38,505 p=32470 u=root |  changed: [localhost] => (item={'key': 'mdraid', 'value': {'name': 'mdraid', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'raid', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': {'devices': ['/dev/sda', '/dev/sdb'], 'level': 1, 'partitions': [{'name': 'boot', 'mount': '/boot', 'size': '1/1', 'fs': 'ext4'}]}, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:31:38,512 p=32470 u=root |  TASK [dnsmasq : create dnsmasq config] ***************************************************************************
+2024-01-22 15:31:38,695 p=32470 u=root |  ok: [localhost]
+2024-01-22 15:31:38,702 p=32470 u=root |  TASK [dnsmasq : add target machines to /etc/hosts] ***************************************************************
+2024-01-22 15:31:38,797 p=32470 u=root |  ok: [localhost] => (item={'hostname': 'node1', 'ip': '172.16.0.50'})
+2024-01-22 15:31:38,876 p=32470 u=root |  ok: [localhost] => (item={'hostname': 'node2', 'ip': '172.16.0.51'})
+2024-01-22 15:31:38,883 p=32470 u=root |  TASK [dnsmasq : clear dhcp.leases] *******************************************************************************
+2024-01-22 15:31:38,969 p=32470 u=root |  changed: [localhost]
+2024-01-22 15:31:38,976 p=32470 u=root |  TASK [dnsmasq : restart dnsmasq] *********************************************************************************
+2024-01-22 15:31:39,221 p=32470 u=root |  changed: [localhost]
+2024-01-22 15:31:39,228 p=32470 u=root |  TASK [pxe : install syslinux-efi] ********************************************************************************
+2024-01-22 15:31:39,473 p=32470 u=root |  ok: [localhost]
+2024-01-22 15:31:39,480 p=32470 u=root |  TASK [pxe : copying boot files] **********************************************************************************
+2024-01-22 15:31:39,713 p=32470 u=root |  ok: [localhost] => (item=/usr/lib/SYSLINUX.EFI/efi64/syslinux.efi)
+2024-01-22 15:31:39,933 p=32470 u=root |  ok: [localhost] => (item=/usr/lib/syslinux/modules/efi64/ldlinux.e64)
+2024-01-22 15:31:39,941 p=32470 u=root |  TASK [pxe : remove old PXELinux configs] *************************************************************************
+2024-01-22 15:31:40,031 p=32470 u=root |  changed: [localhost]
+2024-01-22 15:31:40,037 p=32470 u=root |  TASK [pxe : create directory for PXELinux configs] ***************************************************************
+2024-01-22 15:31:40,126 p=32470 u=root |  changed: [localhost]
+2024-01-22 15:31:40,134 p=32470 u=root |  TASK [pxe : create default PXELinux config] **********************************************************************
+2024-01-22 15:31:40,142 p=32470 u=root |  skipping: [localhost]
+2024-01-22 15:31:40,148 p=32470 u=root |  TASK [pxe : create PXELinux configs] *****************************************************************************
+2024-01-22 15:31:40,340 p=32470 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:8E:C5:2E'], 'hostname': 'astra1', 'ip': '10.1.2.240', 'preseed': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'gateway': '10.1.2.2', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:31:40,517 p=32470 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:E5:26:80'], 'hostname': 'astra2', 'ip': '10.1.2.241', 'preseed': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'gateway': '10.1.2.2', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:31:40,694 p=32470 u=root |  changed: [localhost] => (item={'mac': ['00:25:90:cb:03:2b', '00:25:90:cb:03:2a', '90:e2:ba:21:35:60', '90:e2:ba:21:35:61'], 'hostname': 'hacnode1', 'ip': '172.16.0.20'})
+2024-01-22 15:31:40,695 p=32470 u=root |  PLAY RECAP *******************************************************************************************************
+2024-01-22 15:31:40,695 p=32470 u=root |  localhost                  : ok=27   changed=11   unreachable=0    failed=0   
+2024-01-22 15:35:52,717 p=1157 u=root |  PLAY [localhost] *************************************************************************************************
+2024-01-22 15:35:52,723 p=1157 u=root |  TASK [Gathering Facts] *******************************************************************************************
+2024-01-22 15:35:54,949 p=1157 u=root |  ok: [localhost]
+2024-01-22 15:35:54,955 p=1157 u=root |  TASK [install dnsmasq & chrony] **********************************************************************************
+2024-01-22 15:35:55,881 p=1157 u=root |  ok: [localhost]
+2024-01-22 15:35:55,887 p=1157 u=root |  TASK [allow crony access] ****************************************************************************************
+2024-01-22 15:35:56,021 p=1157 u=root |  ok: [localhost]
+2024-01-22 15:35:56,028 p=1157 u=root |  TASK [restart chrony] ********************************************************************************************
+2024-01-22 15:35:56,344 p=1157 u=root |  changed: [localhost]
+2024-01-22 15:35:56,352 p=1157 u=root |  TASK [copy : install rsync] **************************************************************************************
+2024-01-22 15:35:56,595 p=1157 u=root |  ok: [localhost]
+2024-01-22 15:35:56,602 p=1157 u=root |  TASK [copy : create repo dir] ************************************************************************************
+2024-01-22 15:35:56,755 p=1157 u=root |  ok: [localhost]
+2024-01-22 15:35:56,763 p=1157 u=root |  TASK [copy : create tftp dir] ************************************************************************************
+2024-01-22 15:35:56,850 p=1157 u=root |  ok: [localhost]
+2024-01-22 15:35:56,857 p=1157 u=root |  TASK [copy : sync repo `dists` with ISO] *************************************************************************
+2024-01-22 15:35:57,023 p=1157 u=root |  ok: [localhost]
+2024-01-22 15:35:57,030 p=1157 u=root |  TASK [copy : sync repo `pool` with ISO] **************************************************************************
+2024-01-22 15:35:57,210 p=1157 u=root |  ok: [localhost]
+2024-01-22 15:35:57,217 p=1157 u=root |  TASK [copy : copy kernel & initrd] *******************************************************************************
+2024-01-22 15:35:57,325 p=1157 u=root |  ok: [localhost] => (item=linux)
+2024-01-22 15:35:57,417 p=1157 u=root |  ok: [localhost] => (item=initrd.gz)
+2024-01-22 15:35:57,511 p=1157 u=root |  ok: [localhost] => (item=pxelinux.0)
+2024-01-22 15:35:57,518 p=1157 u=root |  TASK [vsftpd : install vsftpd] ***********************************************************************************
+2024-01-22 15:35:57,763 p=1157 u=root |  ok: [localhost]
+2024-01-22 15:35:57,770 p=1157 u=root |  TASK [vsftpd : create new root for vsftpd] ***********************************************************************
+2024-01-22 15:35:57,881 p=1157 u=root |  ok: [localhost]
+2024-01-22 15:35:57,888 p=1157 u=root |  TASK [vsftpd : set home directory for ftp] ***********************************************************************
+2024-01-22 15:35:58,038 p=1157 u=root |  changed: [localhost]
+2024-01-22 15:35:58,046 p=1157 u=root |  TASK [vsftpd : create vsftpd config] *****************************************************************************
+2024-01-22 15:35:58,268 p=1157 u=root |  ok: [localhost]
+2024-01-22 15:35:58,275 p=1157 u=root |  TASK [vsftpd : restart vsftpd] ***********************************************************************************
+2024-01-22 15:35:58,441 p=1157 u=root |  changed: [localhost]
+2024-01-22 15:35:58,448 p=1157 u=root |  TASK [preseeds : remove old preseeds] ****************************************************************************
+2024-01-22 15:35:58,554 p=1157 u=root |  changed: [localhost]
+2024-01-22 15:35:58,561 p=1157 u=root |  TASK [preseeds : create preseeds dir] ****************************************************************************
+2024-01-22 15:35:58,668 p=1157 u=root |  changed: [localhost]
+2024-01-22 15:35:58,675 p=1157 u=root |  TASK [preseeds : compile preseeds from `preseed.j2` + `preseeds.yml`] ********************************************
+2024-01-22 15:35:58,941 p=1157 u=root |  changed: [localhost] => (item={'key': 'standard', 'value': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'gateway': '10.1.2.2', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:35:59,145 p=1157 u=root |  changed: [localhost] => (item={'key': 'lvm', 'value': {'name': 'lvm', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'lvm', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:35:59,349 p=1157 u=root |  changed: [localhost] => (item={'key': 'mdraid', 'value': {'name': 'mdraid', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'raid', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': {'devices': ['/dev/sda', '/dev/sdb'], 'level': 1, 'partitions': [{'name': 'boot', 'mount': '/boot', 'size': '1/1', 'fs': 'ext4'}]}, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:35:59,356 p=1157 u=root |  TASK [dnsmasq : create dnsmasq config] ***************************************************************************
+2024-01-22 15:35:59,547 p=1157 u=root |  changed: [localhost]
+2024-01-22 15:35:59,554 p=1157 u=root |  TASK [dnsmasq : add target machines to /etc/hosts] ***************************************************************
+2024-01-22 15:35:59,645 p=1157 u=root |  ok: [localhost] => (item={'hostname': 'node1', 'ip': '172.16.0.50'})
+2024-01-22 15:35:59,729 p=1157 u=root |  ok: [localhost] => (item={'hostname': 'node2', 'ip': '172.16.0.51'})
+2024-01-22 15:35:59,736 p=1157 u=root |  TASK [dnsmasq : clear dhcp.leases] *******************************************************************************
+2024-01-22 15:35:59,822 p=1157 u=root |  changed: [localhost]
+2024-01-22 15:35:59,829 p=1157 u=root |  TASK [dnsmasq : restart dnsmasq] *********************************************************************************
+2024-01-22 15:36:00,053 p=1157 u=root |  changed: [localhost]
+2024-01-22 15:36:00,060 p=1157 u=root |  TASK [pxe : install syslinux-efi] ********************************************************************************
+2024-01-22 15:36:00,318 p=1157 u=root |  ok: [localhost]
+2024-01-22 15:36:00,326 p=1157 u=root |  TASK [pxe : copying boot files] **********************************************************************************
+2024-01-22 15:36:00,560 p=1157 u=root |  ok: [localhost] => (item=/usr/lib/SYSLINUX.EFI/efi64/syslinux.efi)
+2024-01-22 15:36:00,783 p=1157 u=root |  ok: [localhost] => (item=/usr/lib/syslinux/modules/efi64/ldlinux.e64)
+2024-01-22 15:36:00,790 p=1157 u=root |  TASK [pxe : remove old PXELinux configs] *************************************************************************
+2024-01-22 15:36:00,882 p=1157 u=root |  changed: [localhost]
+2024-01-22 15:36:00,889 p=1157 u=root |  TASK [pxe : create directory for PXELinux configs] ***************************************************************
+2024-01-22 15:36:00,982 p=1157 u=root |  changed: [localhost]
+2024-01-22 15:36:00,989 p=1157 u=root |  TASK [pxe : create default PXELinux config] **********************************************************************
+2024-01-22 15:36:00,997 p=1157 u=root |  skipping: [localhost]
+2024-01-22 15:36:01,003 p=1157 u=root |  TASK [pxe : create PXELinux configs] *****************************************************************************
+2024-01-22 15:36:01,195 p=1157 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:8E:C5:2E'], 'hostname': 'astra1', 'ip': '10.1.2.240', 'preseed': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'gateway': '10.1.2.2', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:36:01,371 p=1157 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:E5:26:80'], 'hostname': 'astra2', 'ip': '10.1.2.241', 'preseed': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'gateway': '10.1.2.2', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:36:01,415 p=1157 u=root |  failed: [localhost] (item={'mac': ['BC:24:11:F6:5B:75'], 'hostname': 'astra3', 'ip': '10.1.2.242', 'preseed': {'name': 'lvm', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'lvm', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}}) => {"changed": false, "item": {"hostname": "astra3", "ip": "10.1.2.242", "mac": ["BC:24:11:F6:5B:75"], "preseed": {"astra": [], "astra_edition": "orel", "astra_setup": [], "disk": "/dev/sda", "extra_pkgs": ["ethtool", "ifenslave", "lvm2"], "finish": "reboot", "interface": "eth0", "keyboard_toggle": "Ctrl+Shift", "linux_image": "linux-5.15-generic", "locale": "ru_RU", "lvm": {"name": "vg"}, "name": "lvm", "partitions": [{"fs": "ext4", "mount": "/", "name": "root", "size": "30/50"}, {"fs": "swap", "name": "swap", "size": "200%"}, {"fs": "ext4", "mount": "/var", "name": "var", "size": "100/200"}], "partman": "lvm", "softraid": null, "tasksel": ["Base packages", "SSH server"], "timezone": "Europe/Moscow"}}, "msg": "AnsibleUndefinedVariable: 'dict object' has no attribute 'os_name'"}
+2024-01-22 15:36:01,598 p=1157 u=root |  changed: [localhost] => (item={'mac': ['00:25:90:cb:03:2b', '00:25:90:cb:03:2a', '90:e2:ba:21:35:60', '90:e2:ba:21:35:61'], 'hostname': 'hacnode1', 'ip': '172.16.0.20'})
+2024-01-22 15:36:01,599 p=1157 u=root |  	to retry, use: --limit @/home/ek/pxe/deb_preseed_install/site.retry
+
+2024-01-22 15:36:01,599 p=1157 u=root |  PLAY RECAP *******************************************************************************************************
+2024-01-22 15:36:01,599 p=1157 u=root |  localhost                  : ok=26   changed=11   unreachable=0    failed=1   
+2024-01-22 15:36:48,936 p=2184 u=root |  PLAY [localhost] *************************************************************************************************
+2024-01-22 15:36:48,942 p=2184 u=root |  TASK [Gathering Facts] *******************************************************************************************
+2024-01-22 15:36:51,128 p=2184 u=root |  ok: [localhost]
+2024-01-22 15:36:51,135 p=2184 u=root |  TASK [install dnsmasq & chrony] **********************************************************************************
+2024-01-22 15:36:51,974 p=2184 u=root |  ok: [localhost]
+2024-01-22 15:36:51,981 p=2184 u=root |  TASK [allow crony access] ****************************************************************************************
+2024-01-22 15:36:52,109 p=2184 u=root |  ok: [localhost]
+2024-01-22 15:36:52,116 p=2184 u=root |  TASK [restart chrony] ********************************************************************************************
+2024-01-22 15:36:52,437 p=2184 u=root |  changed: [localhost]
+2024-01-22 15:36:52,444 p=2184 u=root |  TASK [copy : install rsync] **************************************************************************************
+2024-01-22 15:36:52,693 p=2184 u=root |  ok: [localhost]
+2024-01-22 15:36:52,700 p=2184 u=root |  TASK [copy : create repo dir] ************************************************************************************
+2024-01-22 15:36:52,851 p=2184 u=root |  ok: [localhost]
+2024-01-22 15:36:52,859 p=2184 u=root |  TASK [copy : create tftp dir] ************************************************************************************
+2024-01-22 15:36:52,946 p=2184 u=root |  ok: [localhost]
+2024-01-22 15:36:52,953 p=2184 u=root |  TASK [copy : sync repo `dists` with ISO] *************************************************************************
+2024-01-22 15:36:53,119 p=2184 u=root |  ok: [localhost]
+2024-01-22 15:36:53,126 p=2184 u=root |  TASK [copy : sync repo `pool` with ISO] **************************************************************************
+2024-01-22 15:36:53,305 p=2184 u=root |  ok: [localhost]
+2024-01-22 15:36:53,312 p=2184 u=root |  TASK [copy : copy kernel & initrd] *******************************************************************************
+2024-01-22 15:36:53,426 p=2184 u=root |  ok: [localhost] => (item=linux)
+2024-01-22 15:36:53,521 p=2184 u=root |  ok: [localhost] => (item=initrd.gz)
+2024-01-22 15:36:53,616 p=2184 u=root |  ok: [localhost] => (item=pxelinux.0)
+2024-01-22 15:36:53,623 p=2184 u=root |  TASK [vsftpd : install vsftpd] ***********************************************************************************
+2024-01-22 15:36:53,867 p=2184 u=root |  ok: [localhost]
+2024-01-22 15:36:53,874 p=2184 u=root |  TASK [vsftpd : create new root for vsftpd] ***********************************************************************
+2024-01-22 15:36:53,979 p=2184 u=root |  ok: [localhost]
+2024-01-22 15:36:53,987 p=2184 u=root |  TASK [vsftpd : set home directory for ftp] ***********************************************************************
+2024-01-22 15:36:54,141 p=2184 u=root |  changed: [localhost]
+2024-01-22 15:36:54,149 p=2184 u=root |  TASK [vsftpd : create vsftpd config] *****************************************************************************
+2024-01-22 15:36:54,369 p=2184 u=root |  ok: [localhost]
+2024-01-22 15:36:54,376 p=2184 u=root |  TASK [vsftpd : restart vsftpd] ***********************************************************************************
+2024-01-22 15:36:54,546 p=2184 u=root |  changed: [localhost]
+2024-01-22 15:36:54,553 p=2184 u=root |  TASK [preseeds : remove old preseeds] ****************************************************************************
+2024-01-22 15:36:54,661 p=2184 u=root |  changed: [localhost]
+2024-01-22 15:36:54,668 p=2184 u=root |  TASK [preseeds : create preseeds dir] ****************************************************************************
+2024-01-22 15:36:54,778 p=2184 u=root |  changed: [localhost]
+2024-01-22 15:36:54,785 p=2184 u=root |  TASK [preseeds : compile preseeds from `preseed.j2` + `preseeds.yml`] ********************************************
+2024-01-22 15:36:55,041 p=2184 u=root |  changed: [localhost] => (item={'key': 'standard', 'value': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'gateway': '10.1.2.2', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:36:55,251 p=2184 u=root |  changed: [localhost] => (item={'key': 'lvm', 'value': {'name': 'lvm', 'os_name': 'astra', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'lvm', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:36:55,473 p=2184 u=root |  changed: [localhost] => (item={'key': 'mdraid', 'value': {'name': 'mdraid', 'os_name': 'astra', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'raid', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': {'devices': ['/dev/sda', '/dev/sdb'], 'level': 1, 'partitions': [{'name': 'boot', 'mount': '/boot', 'size': '1/1', 'fs': 'ext4'}]}, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:36:55,480 p=2184 u=root |  TASK [dnsmasq : create dnsmasq config] ***************************************************************************
+2024-01-22 15:36:55,675 p=2184 u=root |  ok: [localhost]
+2024-01-22 15:36:55,683 p=2184 u=root |  TASK [dnsmasq : add target machines to /etc/hosts] ***************************************************************
+2024-01-22 15:36:55,773 p=2184 u=root |  ok: [localhost] => (item={'hostname': 'node1', 'ip': '172.16.0.50'})
+2024-01-22 15:36:55,854 p=2184 u=root |  ok: [localhost] => (item={'hostname': 'node2', 'ip': '172.16.0.51'})
+2024-01-22 15:36:55,861 p=2184 u=root |  TASK [dnsmasq : clear dhcp.leases] *******************************************************************************
+2024-01-22 15:36:55,948 p=2184 u=root |  changed: [localhost]
+2024-01-22 15:36:55,954 p=2184 u=root |  TASK [dnsmasq : restart dnsmasq] *********************************************************************************
+2024-01-22 15:36:56,187 p=2184 u=root |  changed: [localhost]
+2024-01-22 15:36:56,194 p=2184 u=root |  TASK [pxe : install syslinux-efi] ********************************************************************************
+2024-01-22 15:36:56,445 p=2184 u=root |  ok: [localhost]
+2024-01-22 15:36:56,453 p=2184 u=root |  TASK [pxe : copying boot files] **********************************************************************************
+2024-01-22 15:36:56,684 p=2184 u=root |  ok: [localhost] => (item=/usr/lib/SYSLINUX.EFI/efi64/syslinux.efi)
+2024-01-22 15:36:56,903 p=2184 u=root |  ok: [localhost] => (item=/usr/lib/syslinux/modules/efi64/ldlinux.e64)
+2024-01-22 15:36:56,910 p=2184 u=root |  TASK [pxe : remove old PXELinux configs] *************************************************************************
+2024-01-22 15:36:57,001 p=2184 u=root |  changed: [localhost]
+2024-01-22 15:36:57,008 p=2184 u=root |  TASK [pxe : create directory for PXELinux configs] ***************************************************************
+2024-01-22 15:36:57,100 p=2184 u=root |  changed: [localhost]
+2024-01-22 15:36:57,107 p=2184 u=root |  TASK [pxe : create default PXELinux config] **********************************************************************
+2024-01-22 15:36:57,115 p=2184 u=root |  skipping: [localhost]
+2024-01-22 15:36:57,122 p=2184 u=root |  TASK [pxe : create PXELinux configs] *****************************************************************************
+2024-01-22 15:36:57,322 p=2184 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:8E:C5:2E'], 'hostname': 'astra1', 'ip': '10.1.2.240', 'preseed': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'gateway': '10.1.2.2', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:36:57,504 p=2184 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:E5:26:80'], 'hostname': 'astra2', 'ip': '10.1.2.241', 'preseed': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'gateway': '10.1.2.2', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:36:57,679 p=2184 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:F6:5B:75'], 'hostname': 'astra3', 'ip': '10.1.2.242', 'preseed': {'name': 'lvm', 'os_name': 'astra', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'lvm', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 15:36:57,856 p=2184 u=root |  changed: [localhost] => (item={'mac': ['00:25:90:cb:03:2b', '00:25:90:cb:03:2a', '90:e2:ba:21:35:60', '90:e2:ba:21:35:61'], 'hostname': 'hacnode1', 'ip': '172.16.0.20'})
+2024-01-22 15:36:57,857 p=2184 u=root |  PLAY RECAP *******************************************************************************************************
+2024-01-22 15:36:57,857 p=2184 u=root |  localhost                  : ok=27   changed=11   unreachable=0    failed=0   
+2024-01-22 15:44:57,675 p=3298 u=root |  PLAY [localhost] ********************************************************************
+2024-01-22 15:44:57,680 p=3298 u=root |  TASK [Gathering Facts] **************************************************************
+2024-01-22 15:44:59,915 p=3298 u=root |  ok: [localhost]
+2024-01-22 15:44:59,922 p=3298 u=root |  TASK [dnsmasq : clear dhcp.leases] **************************************************
+2024-01-22 15:45:00,058 p=3298 u=root |  changed: [localhost]
+2024-01-22 15:45:00,066 p=3298 u=root |  TASK [dnsmasq : restart dnsmasq] ****************************************************
+2024-01-22 15:45:00,429 p=3298 u=root |  changed: [localhost]
+2024-01-22 15:45:00,430 p=3298 u=root |  PLAY RECAP **************************************************************************
+2024-01-22 15:45:00,430 p=3298 u=root |  localhost                  : ok=3    changed=2    unreachable=0    failed=0   
+2024-01-22 16:04:25,807 p=3935 u=root |  PLAY [localhost] ********************************************************************
+2024-01-22 16:04:25,813 p=3935 u=root |  TASK [Gathering Facts] **************************************************************
+2024-01-22 16:04:28,035 p=3935 u=root |  ok: [localhost]
+2024-01-22 16:04:28,042 p=3935 u=root |  TASK [install dnsmasq & chrony] *****************************************************
+2024-01-22 16:04:28,938 p=3935 u=root |  ok: [localhost]
+2024-01-22 16:04:28,945 p=3935 u=root |  TASK [allow crony access] ***********************************************************
+2024-01-22 16:04:29,077 p=3935 u=root |  ok: [localhost]
+2024-01-22 16:04:29,084 p=3935 u=root |  TASK [restart chrony] ***************************************************************
+2024-01-22 16:04:29,403 p=3935 u=root |  changed: [localhost]
+2024-01-22 16:04:29,410 p=3935 u=root |  TASK [copy : install rsync] *********************************************************
+2024-01-22 16:04:29,658 p=3935 u=root |  ok: [localhost]
+2024-01-22 16:04:29,665 p=3935 u=root |  TASK [copy : create repo dir] *******************************************************
+2024-01-22 16:04:29,819 p=3935 u=root |  ok: [localhost]
+2024-01-22 16:04:29,827 p=3935 u=root |  TASK [copy : create tftp dir] *******************************************************
+2024-01-22 16:04:29,920 p=3935 u=root |  ok: [localhost]
+2024-01-22 16:04:29,928 p=3935 u=root |  TASK [copy : sync repo `dists` with ISO] ********************************************
+2024-01-22 16:04:30,094 p=3935 u=root |  ok: [localhost]
+2024-01-22 16:04:30,101 p=3935 u=root |  TASK [copy : sync repo `pool` with ISO] *********************************************
+2024-01-22 16:04:30,279 p=3935 u=root |  ok: [localhost]
+2024-01-22 16:04:30,286 p=3935 u=root |  TASK [copy : copy kernel & initrd] **************************************************
+2024-01-22 16:04:30,396 p=3935 u=root |  ok: [localhost] => (item=linux)
+2024-01-22 16:04:30,489 p=3935 u=root |  ok: [localhost] => (item=initrd.gz)
+2024-01-22 16:04:30,581 p=3935 u=root |  ok: [localhost] => (item=pxelinux.0)
+2024-01-22 16:04:30,588 p=3935 u=root |  TASK [vsftpd : install vsftpd] ******************************************************
+2024-01-22 16:04:30,832 p=3935 u=root |  ok: [localhost]
+2024-01-22 16:04:30,839 p=3935 u=root |  TASK [vsftpd : create new root for vsftpd] ******************************************
+2024-01-22 16:04:30,944 p=3935 u=root |  ok: [localhost]
+2024-01-22 16:04:30,951 p=3935 u=root |  TASK [vsftpd : set home directory for ftp] ******************************************
+2024-01-22 16:04:31,099 p=3935 u=root |  changed: [localhost]
+2024-01-22 16:04:31,106 p=3935 u=root |  TASK [vsftpd : create vsftpd config] ************************************************
+2024-01-22 16:04:31,324 p=3935 u=root |  ok: [localhost]
+2024-01-22 16:04:31,331 p=3935 u=root |  TASK [vsftpd : restart vsftpd] ******************************************************
+2024-01-22 16:04:31,496 p=3935 u=root |  changed: [localhost]
+2024-01-22 16:04:31,503 p=3935 u=root |  TASK [preseeds : remove old preseeds] ***********************************************
+2024-01-22 16:04:31,616 p=3935 u=root |  changed: [localhost]
+2024-01-22 16:04:31,622 p=3935 u=root |  TASK [preseeds : create preseeds dir] ***********************************************
+2024-01-22 16:04:31,735 p=3935 u=root |  changed: [localhost]
+2024-01-22 16:04:31,742 p=3935 u=root |  TASK [preseeds : compile preseeds from `preseed.j2` + `preseeds.yml`] ***************
+2024-01-22 16:04:32,015 p=3935 u=root |  changed: [localhost] => (item={'key': 'standard', 'value': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'gateway': '10.1.2.2', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 16:04:32,224 p=3935 u=root |  changed: [localhost] => (item={'key': 'lvm', 'value': {'name': 'lvm', 'os_name': 'astra', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'lvm', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 16:04:32,440 p=3935 u=root |  changed: [localhost] => (item={'key': 'mdraid', 'value': {'name': 'mdraid', 'os_name': 'astra', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'raid', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': {'devices': ['/dev/sda', '/dev/sdb'], 'level': 1, 'partitions': [{'name': 'boot', 'mount': '/boot', 'size': '1/1', 'fs': 'ext4'}]}, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 16:04:32,447 p=3935 u=root |  TASK [dnsmasq : create dnsmasq config] **********************************************
+2024-01-22 16:04:32,634 p=3935 u=root |  ok: [localhost]
+2024-01-22 16:04:32,641 p=3935 u=root |  TASK [dnsmasq : add target machines to /etc/hosts] **********************************
+2024-01-22 16:04:32,736 p=3935 u=root |  ok: [localhost] => (item={'hostname': 'node1', 'ip': '172.16.0.50'})
+2024-01-22 16:04:32,817 p=3935 u=root |  ok: [localhost] => (item={'hostname': 'node2', 'ip': '172.16.0.51'})
+2024-01-22 16:04:32,824 p=3935 u=root |  TASK [dnsmasq : clear dhcp.leases] **************************************************
+2024-01-22 16:04:32,914 p=3935 u=root |  changed: [localhost]
+2024-01-22 16:04:32,921 p=3935 u=root |  TASK [dnsmasq : restart dnsmasq] ****************************************************
+2024-01-22 16:04:33,150 p=3935 u=root |  changed: [localhost]
+2024-01-22 16:04:33,157 p=3935 u=root |  TASK [pxe : install syslinux-efi] ***************************************************
+2024-01-22 16:04:33,419 p=3935 u=root |  ok: [localhost]
+2024-01-22 16:04:33,427 p=3935 u=root |  TASK [pxe : copying boot files] *****************************************************
+2024-01-22 16:04:33,660 p=3935 u=root |  ok: [localhost] => (item=/usr/lib/SYSLINUX.EFI/efi64/syslinux.efi)
+2024-01-22 16:04:33,879 p=3935 u=root |  ok: [localhost] => (item=/usr/lib/syslinux/modules/efi64/ldlinux.e64)
+2024-01-22 16:04:33,886 p=3935 u=root |  TASK [pxe : remove old PXELinux configs] ********************************************
+2024-01-22 16:04:33,980 p=3935 u=root |  changed: [localhost]
+2024-01-22 16:04:33,986 p=3935 u=root |  TASK [pxe : create directory for PXELinux configs] **********************************
+2024-01-22 16:04:34,080 p=3935 u=root |  changed: [localhost]
+2024-01-22 16:04:34,087 p=3935 u=root |  TASK [pxe : create default PXELinux config] *****************************************
+2024-01-22 16:04:34,095 p=3935 u=root |  skipping: [localhost]
+2024-01-22 16:04:34,102 p=3935 u=root |  TASK [pxe : create PXELinux configs] ************************************************
+2024-01-22 16:04:34,298 p=3935 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:8E:C5:2E'], 'hostname': 'astra1', 'ip': '10.1.2.240', 'preseed': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'gateway': '10.1.2.2', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 16:04:34,481 p=3935 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:E5:26:80'], 'hostname': 'astra2', 'ip': '10.1.2.241', 'preseed': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'gateway': '10.1.2.2', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 16:04:34,661 p=3935 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:F6:5B:75'], 'hostname': 'astra3', 'ip': '10.1.2.242', 'preseed': {'name': 'lvm', 'os_name': 'astra', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'lvm', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 16:04:34,844 p=3935 u=root |  changed: [localhost] => (item={'mac': ['00:25:90:cb:03:2b', '00:25:90:cb:03:2a', '90:e2:ba:21:35:60', '90:e2:ba:21:35:61'], 'hostname': 'hacnode1', 'ip': '172.16.0.20'})
+2024-01-22 16:04:34,845 p=3935 u=root |  PLAY RECAP **************************************************************************
+2024-01-22 16:04:34,846 p=3935 u=root |  localhost                  : ok=27   changed=11   unreachable=0    failed=0   
+2024-01-22 16:16:48,840 p=5336 u=root |  PLAY [localhost] ********************************************************************
+2024-01-22 16:16:48,845 p=5336 u=root |  TASK [Gathering Facts] **************************************************************
+2024-01-22 16:16:51,086 p=5336 u=root |  ok: [localhost]
+2024-01-22 16:16:51,093 p=5336 u=root |  TASK [install dnsmasq & chrony] *****************************************************
+2024-01-22 16:16:52,208 p=5336 u=root |  ok: [localhost]
+2024-01-22 16:16:52,215 p=5336 u=root |  TASK [allow crony access] ***********************************************************
+2024-01-22 16:16:52,345 p=5336 u=root |  ok: [localhost]
+2024-01-22 16:16:52,352 p=5336 u=root |  TASK [restart chrony] ***************************************************************
+2024-01-22 16:16:52,665 p=5336 u=root |  changed: [localhost]
+2024-01-22 16:16:52,672 p=5336 u=root |  TASK [copy : install rsync] *********************************************************
+2024-01-22 16:16:52,923 p=5336 u=root |  ok: [localhost]
+2024-01-22 16:16:52,930 p=5336 u=root |  TASK [copy : create repo dir] *******************************************************
+2024-01-22 16:16:53,085 p=5336 u=root |  ok: [localhost]
+2024-01-22 16:16:53,092 p=5336 u=root |  TASK [copy : create tftp dir] *******************************************************
+2024-01-22 16:16:53,179 p=5336 u=root |  ok: [localhost]
+2024-01-22 16:16:53,186 p=5336 u=root |  TASK [copy : sync repo `dists` with ISO] ********************************************
+2024-01-22 16:16:53,355 p=5336 u=root |  ok: [localhost]
+2024-01-22 16:16:53,362 p=5336 u=root |  TASK [copy : sync repo `pool` with ISO] *********************************************
+2024-01-22 16:16:53,545 p=5336 u=root |  ok: [localhost]
+2024-01-22 16:16:53,552 p=5336 u=root |  TASK [copy : copy kernel & initrd] **************************************************
+2024-01-22 16:16:53,662 p=5336 u=root |  ok: [localhost] => (item=linux)
+2024-01-22 16:16:53,755 p=5336 u=root |  ok: [localhost] => (item=initrd.gz)
+2024-01-22 16:16:53,846 p=5336 u=root |  ok: [localhost] => (item=pxelinux.0)
+2024-01-22 16:16:53,853 p=5336 u=root |  TASK [vsftpd : install vsftpd] ******************************************************
+2024-01-22 16:16:54,107 p=5336 u=root |  ok: [localhost]
+2024-01-22 16:16:54,114 p=5336 u=root |  TASK [vsftpd : create new root for vsftpd] ******************************************
+2024-01-22 16:16:54,221 p=5336 u=root |  ok: [localhost]
+2024-01-22 16:16:54,228 p=5336 u=root |  TASK [vsftpd : set home directory for ftp] ******************************************
+2024-01-22 16:16:54,375 p=5336 u=root |  changed: [localhost]
+2024-01-22 16:16:54,382 p=5336 u=root |  TASK [vsftpd : create vsftpd config] ************************************************
+2024-01-22 16:16:54,605 p=5336 u=root |  ok: [localhost]
+2024-01-22 16:16:54,612 p=5336 u=root |  TASK [vsftpd : restart vsftpd] ******************************************************
+2024-01-22 16:16:54,784 p=5336 u=root |  changed: [localhost]
+2024-01-22 16:16:54,790 p=5336 u=root |  TASK [preseeds : remove old preseeds] ***********************************************
+2024-01-22 16:16:54,898 p=5336 u=root |  changed: [localhost]
+2024-01-22 16:16:54,905 p=5336 u=root |  TASK [preseeds : create preseeds dir] ***********************************************
+2024-01-22 16:16:55,014 p=5336 u=root |  changed: [localhost]
+2024-01-22 16:16:55,021 p=5336 u=root |  TASK [preseeds : compile preseeds from `preseed.j2` + `preseeds.yml`] ***************
+2024-01-22 16:16:55,285 p=5336 u=root |  changed: [localhost] => (item={'key': 'standard', 'value': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'gateway': '10.1.2.2', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 16:16:55,489 p=5336 u=root |  changed: [localhost] => (item={'key': 'lvm', 'value': {'name': 'lvm', 'os_name': 'astra', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'lvm', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 16:16:55,707 p=5336 u=root |  changed: [localhost] => (item={'key': 'mdraid', 'value': {'name': 'mdraid', 'os_name': 'astra', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'raid', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': {'devices': ['/dev/sda', '/dev/sdb'], 'level': 1, 'partitions': [{'name': 'boot', 'mount': '/boot', 'size': '1/1', 'fs': 'ext4'}]}, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 16:16:55,714 p=5336 u=root |  TASK [dnsmasq : create dnsmasq config] **********************************************
+2024-01-22 16:16:55,902 p=5336 u=root |  ok: [localhost]
+2024-01-22 16:16:55,909 p=5336 u=root |  TASK [dnsmasq : add target machines to /etc/hosts] **********************************
+2024-01-22 16:16:56,003 p=5336 u=root |  ok: [localhost] => (item={'hostname': 'node1', 'ip': '172.16.0.50'})
+2024-01-22 16:16:56,082 p=5336 u=root |  ok: [localhost] => (item={'hostname': 'node2', 'ip': '172.16.0.51'})
+2024-01-22 16:16:56,089 p=5336 u=root |  TASK [dnsmasq : clear dhcp.leases] **************************************************
+2024-01-22 16:16:56,181 p=5336 u=root |  changed: [localhost]
+2024-01-22 16:16:56,188 p=5336 u=root |  TASK [dnsmasq : restart dnsmasq] ****************************************************
+2024-01-22 16:16:56,418 p=5336 u=root |  changed: [localhost]
+2024-01-22 16:16:56,425 p=5336 u=root |  TASK [pxe : install syslinux-efi] ***************************************************
+2024-01-22 16:16:56,672 p=5336 u=root |  ok: [localhost]
+2024-01-22 16:16:56,679 p=5336 u=root |  TASK [pxe : copying boot files] *****************************************************
+2024-01-22 16:16:56,918 p=5336 u=root |  ok: [localhost] => (item=/usr/lib/SYSLINUX.EFI/efi64/syslinux.efi)
+2024-01-22 16:16:57,141 p=5336 u=root |  ok: [localhost] => (item=/usr/lib/syslinux/modules/efi64/ldlinux.e64)
+2024-01-22 16:16:57,148 p=5336 u=root |  TASK [pxe : remove old PXELinux configs] ********************************************
+2024-01-22 16:16:57,238 p=5336 u=root |  changed: [localhost]
+2024-01-22 16:16:57,245 p=5336 u=root |  TASK [pxe : create directory for PXELinux configs] **********************************
+2024-01-22 16:16:57,335 p=5336 u=root |  changed: [localhost]
+2024-01-22 16:16:57,342 p=5336 u=root |  TASK [pxe : create default PXELinux config] *****************************************
+2024-01-22 16:16:57,350 p=5336 u=root |  skipping: [localhost]
+2024-01-22 16:16:57,357 p=5336 u=root |  TASK [pxe : create PXELinux configs] ************************************************
+2024-01-22 16:16:57,552 p=5336 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:8E:C5:2E'], 'hostname': 'astra1', 'ip': '10.1.2.240', 'preseed': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'gateway': '10.1.2.2', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 16:16:57,727 p=5336 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:E5:26:80'], 'hostname': 'astra2', 'ip': '10.1.2.241', 'preseed': {'name': 'standard', 'os_name': 'astra', 'interface': 'eth0', 'gateway': '10.1.2.2', 'linux_image': 'linux-5.15-generic', 'partman': 'regular', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 16:16:57,902 p=5336 u=root |  changed: [localhost] => (item={'mac': ['BC:24:11:F6:5B:75'], 'hostname': 'astra3', 'ip': '10.1.2.242', 'preseed': {'name': 'lvm', 'os_name': 'astra', 'interface': 'eth0', 'linux_image': 'linux-5.15-generic', 'partman': 'lvm', 'disk': '/dev/sda', 'lvm': {'name': 'vg'}, 'softraid': None, 'partitions': [{'name': 'root', 'mount': '/', 'size': '30/50', 'fs': 'ext4'}, {'name': 'swap', 'size': '200%', 'fs': 'swap'}, {'name': 'var', 'mount': '/var', 'size': '100/200', 'fs': 'ext4'}], 'locale': 'ru_RU', 'keyboard_toggle': 'Ctrl+Shift', 'timezone': 'Europe/Moscow', 'tasksel': ['Base packages', 'SSH server'], 'extra_pkgs': ['ethtool', 'ifenslave', 'lvm2'], 'astra': [], 'astra_edition': 'orel', 'astra_setup': [], 'finish': 'reboot'}})
+2024-01-22 16:16:58,078 p=5336 u=root |  changed: [localhost] => (item={'mac': ['00:25:90:cb:03:2b', '00:25:90:cb:03:2a', '90:e2:ba:21:35:60', '90:e2:ba:21:35:61'], 'hostname': 'hacnode1', 'ip': '172.16.0.20'})
+2024-01-22 16:16:58,079 p=5336 u=root |  PLAY RECAP **************************************************************************
+2024-01-22 16:16:58,080 p=5336 u=root |  localhost                  : ok=27   changed=11   unreachable=0    failed=0   

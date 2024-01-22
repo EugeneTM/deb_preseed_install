@@ -45,16 +45,3 @@
     preseed: "{{ item.preseed | default(preseeds.standard) }}"
     host: "{{ item }}"
   when: machines_by_mac is defined
-
-# - name: debug
-#   template:
-#     src: test.j2
-#     dest: "{{ tftp.path }}/pxelinux.cfg/01-{{ item.mac.0 | replace(':', '-') | lower }}"
-#     owner: dnsmasq
-#     mode: 0644
-#   loop: "{{ machines_by_mac }}"
-#   vars:
-#     preseed: "{{ item.preseed | default(preseeds.standard) }}"
-#   when: machines_by_mac is defined
-
-    # - { mac: ['BC:24:11:8E:C5:2E'], hostname: astra1, ip: 10.1.2.240, preseed: preseeds.standard }

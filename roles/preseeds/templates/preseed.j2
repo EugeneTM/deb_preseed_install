@@ -43,38 +43,41 @@ d-i console-cyrillic/toggle select Ctrl+Shift
 d-i console-setup/fontface select Terminus
 d-i console-setup/ask_detect boolean false
 
-# подключение репозиториев
+# additional repos
 d-i apt-setup/non-free boolean true
 d-i apt-setup/contrib boolean true
 
-# выключить показ диалога с WEP ключом.
+# turn off WEP key request
 d-i netcfg/wireless_wep string
 
-# Выбор интерфейса:
+# network interface
 d-i netcfg/choose_interface select {{ preseed.interface }}
 
-# настройка зеркала с пакетами
+# repo mirrors
 d-i mirror/protocol string {{ server_type }}
 d-i mirror/country string manual
 d-i mirror/{{ server_type }}/hostname string {{ repos.host }}
 d-i mirror/{{ server_type }}/directory string {{ repos.os }}
 d-i mirror/{{ server_type }}/proxy string
 
-# задаёт, установлены или нет аппаратные часы по Гринвичу.
+# UTC or not
 d-i clock-setup/utc boolean true
 
-# настройка timezone
+# timezone
 {% if 'timezone' in preseed %}
 d-i time/zone string {{ preseed.timezone }}
 {% else %}
 d-i time/zone string Europe/Moscow
 {% endif %}
 
-# определяет, нужно ли использовать NTP для установки часов во время установки
+# NTP
 d-i clock-setup/ntp boolean true
 d-i clock-setup/ntp-server string {{ repos.host }}
 
-# разбиение диска создание разделов
+# disk partitioning
+
+# Force UEFI if something is already installed
+d-i partman-efi/non_efi_system boolean true
 {% if preseed.partman == 'raid' %}
 d-i partman-auto/disk string {{ preseed.softraid.devices | join(' ') }}
 {% elif 'disk' in preseed and preseed.disk %}
@@ -84,6 +87,8 @@ d-i partman-auto/method string {{ preseed.partman }}
 d-i partman-auto/purge_lvm_from_device boolean true
 {% if 'lvm' in preseed %}
 d-i partman-lvm/confirm boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
+d-i partman-lvm/vgdelete_confirm boolean true
 d-i partman-lvm/vgcreate string {{ preseed.lvm.name | default('vg') }}
 d-i partman-auto-lvm/new_vg_name string {{ preseed.lvm.name | default('vg') }}
 d-i partman-auto-lvm/guided_size string 100%
@@ -91,10 +96,10 @@ d-i partman-lvm/device_remove_lvm boolean true
 d-i partman-auto-lvm/no_boot boolean true
 {% endif %}
 {% if preseed.partman == 'raid' %}
-d-i partman-md/device_remove_md boolean true
-d-i partman-md/confirm_nochanges boolean true
 d-i partman-md/confirm boolean true
 d-i partman-md/confirm_nooverwrite  boolean true
+d-i partman-md/device_remove_md boolean true
+d-i partman-md/confirm_nochanges boolean true
 d-i mdadm/boot_degraded boolean true
 d-i partman-auto-raid/recipe string         \
 {% for part in preseed.softraid.partitions %}
@@ -158,7 +163,7 @@ d-i partman-auto/expert_recipe string       \
              .
 
 d-i partman-partitioning/confirm_write_new_label boolean true
-d-i partman/choose_partition select Finish partitioning and write changes to disk
+d-i partman/choose_partition select finish
 d-i partman/confirm boolean true
 d-i partman/confirm_nooverwrite boolean true
 disk-detect	disk-detect/activate_dmraid	boolean	true
@@ -197,17 +202,14 @@ d-i apt-setup/services-select multi-select
 d-i apt-setup/security_host string
 d-i apt-setup/volatile_host string
 
-# По умолчанию программа установки требует, чтобы репозитории
-# аутентифицировались с помощью известного ключа gpg.
-# Этот параметр выключает данную аутентификацию.
-# Предупреждение: это небезопасно, рекомендуется не делать этого.
+# UNSAFE: allow unauthenticated repos for the install process
 d-i debian-installer/allow_unauthenticated string true
 
 # установка базовой системы + рабочий стол Fly
 {% if 'tasksel' in preseed %}
 tasksel tasksel/first multiselect {{ preseed.tasksel | join(', ') }}
 {% else %}
-tasksel tasksel/first multiselect Base, Fly
+tasksel tasksel/first multiselect Base packages, Fly
 {% endif %}
 
 # отдельные дополнительные пакеты для установки

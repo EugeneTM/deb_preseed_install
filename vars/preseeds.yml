@@ -3,16 +3,17 @@ preseeds:
     name: standard
     os_name: astra
     interface: eth0
+    gateway: 10.1.2.2
     linux_image: linux-5.15-generic
     # partman-auto/method (raid, lvm, regular)
     partman: regular
 
     # partman-auto/disk (/dev/sdX, /dev/vdX или пустое значение)
-    disk:
+    disk: /dev/sda
 
-    # настройки LVM, если нет, то не будет использоваться
+    # for lvm partman method
     lvm:
-      name: system
+      name: vg
 
     # настройки программного RAID (если нужен)
     softraid:
@@ -48,7 +49,7 @@ preseeds:
     # Стандартное значение: Base packages, Fly
     tasksel: [Base packages, SSH server]
 
-    extra_pkgs: [ethtool]
+    extra_pkgs: [ethtool,ifenslave,lvm2]
 
     # Спец. возможности Астры: kiosk, ald-server, ald-client ([])
     astra: []
@@ -70,15 +71,52 @@ preseeds:
   #   - 'Enable freeing regions cleanup on EXT-partitions'   # Включить очистку освобождаемых областей для EXT-разделов
   #   - 'Install 32-bit bootloader'            # Установить 32-х битный загрузчик
 
-    # Что делать после уставновки: reboot, poweroff, halt (reboot)
+    # reboot, poweroff, halt
     finish: reboot
 
+  lvm:
+    name: lvm
+    os_name: astra
+    interface: eth0
+    linux_image: linux-5.15-generic
+    partman: lvm
+    disk: /dev/sda
+    lvm:
+      name: vg
+
+    softraid:
+
+    partitions:
+      - name: root
+        mount: /
+        size: 30/50
+        fs: ext4
+      - name: swap
+        size: 200%
+        fs: swap
+      - name: var
+        mount: /var
+        size: 100/200
+        fs: ext4
+
+    locale: ru_RU
+    keyboard_toggle: Ctrl+Shift
+    timezone: Europe/Moscow
+    tasksel: [Base packages, SSH server]
+    extra_pkgs: [ethtool,ifenslave,lvm2]
+    astra: []
+    astra_edition: orel
+    astra_setup: []
+    finish: reboot
+
+  # not tested yet
   mdraid:
     name: mdraid
+    os_name: astra
     interface: eth0
     linux_image: linux-5.15-generic
     partman: raid
-    disk:
+    disk: /dev/sda
     lvm:
       name: vg
 
@@ -112,7 +150,7 @@ preseeds:
     keyboard_toggle: Ctrl+Shift
     timezone: Europe/Moscow
     tasksel: [Base packages, SSH server]
-    extra_pkgs: [ethtool]
+    extra_pkgs: [ethtool,ifenslave,lvm2]
     astra: []
     astra_edition: orel
     astra_setup: []

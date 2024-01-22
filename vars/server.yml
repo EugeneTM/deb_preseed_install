@@ -57,6 +57,8 @@ target_machines:
 # IP назначаются тут
 machines_by_mac:
   - { mac: ["BC:24:11:8E:C5:2E"], hostname: astra1, ip: 10.1.2.240, preseed: "{{ preseeds.standard }}" }
+  - { mac: ["BC:24:11:E5:26:80"], hostname: astra2, ip: 10.1.2.241, preseed: "{{ preseeds.standard }}" }
+  - { mac: ["BC:24:11:F6:5B:75"], hostname: astra3, ip: 10.1.2.242, preseed: "{{ preseeds.lvm }}" }
   - { mac: ['00:25:90:cb:03:2b', '00:25:90:cb:03:2a', '90:e2:ba:21:35:60', '90:e2:ba:21:35:61'], hostname: 'hacnode1', ip: 172.16.0.20 }
 #  - { mac: ['00:1c:c0:f8:ff:6a'], hostname: 'crimea', preseed: 'preseeds.mdraid', ip: 172.16.0.100 }
 #  - { mac: '00-1c-c0-f8-ff-6a', hostname: 'example', preseed: 'preseeds.standard', ip: 10.10.10.50, mask: 255.255.255.0 }
