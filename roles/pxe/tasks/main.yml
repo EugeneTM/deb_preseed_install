@@ -8,6 +8,7 @@
   copy:
     src: "{{ item }}"
     dest: "{{ tftp.path }}"
+    force: no
   with_items:
     - /usr/lib/SYSLINUX.EFI/efi64/syslinux.efi
     - /usr/lib/syslinux/modules/efi64/ldlinux.e64
@@ -18,7 +19,7 @@
     state: absent
     path: "{{ tftp.path }}/pxelinux.cfg"
     
-- name: create directory for PXELinux configs
+- name: create dir for PXELinux configs
   file:
     path: "{{ tftp.path }}/pxelinux.cfg"
     state: directory
@@ -34,14 +35,25 @@
   when:
     dhcp.static_mode is not defined or dhcp.static_mode == false
 
+- name: debug
+  loop: "{{ machines_by_mac }}"
+  debug:
+    msg:
+      # - "{{ item.preseed }}"
+      - "{{ item.preseed | default(default_preseed) }}"
+
 - name: create PXELinux configs
   template:
     src: tftp.conf.j2
-    dest: "{{ tftp.path }}/pxelinux.cfg/01-{{ item.mac.0 | replace(':', '-') | lower }}"
+    dest: "{{ tftp.path }}/pxelinux.cfg/01-{{ item.mac | first | replace(':', '-') | lower }}"
     owner: dnsmasq
     mode: 0644
   loop: "{{ machines_by_mac }}"
   vars:
-    preseed: "{{ item.preseed | default(preseeds.standard) }}"
+    # preseed: "{{ preseeds[item.preseed] | default(preseeds[default_preseed]) }}"
+    preseed: "{{
+      preseeds[item.preseed | default(default_preseed)]
+      }}"
     host: "{{ item }}"
+    preseed_name: "{{ item.preseed | default(default_preseed) }}"
   when: machines_by_mac is defined

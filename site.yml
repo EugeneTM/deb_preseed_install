@@ -1,10 +1,7 @@
-# © ООО «Лаборатория 50», 2014, 2015
-# © EugeneTM, 2024 
----
 - hosts: localhost
   user: root
-  connection: local
   become: false
+  connection: local
 
   vars_files:
     # vars for the install server
@@ -12,28 +9,28 @@
     # vars for the client machines to install OS on
     - vars/preseeds.yml
 
-  pre_tasks:
-  - name: install dnsmasq & chrony
-    apt:
-      update_cache: yes
-      pkg:
-        - dnsmasq
-        - chrony
-      state: latest
-  - name: allow crony access
-    lineinfile:
-      dest: /etc/chrony/chrony.conf
-      line: "allow"
-      insertbefore: BOF
-      state: present
-  - name: restart chrony
-    service:
-      name: chrony
-      state: restarted
+  # pre_tasks:
+  # - name: install dnsmasq & chrony
+  #   apt:
+  #     update_cache: yes
+  #     pkg:
+  #       - dnsmasq
+  #       - chrony
+  #     state: latest
+  # - name: allow crony access
+  #   lineinfile:
+  #     dest: /etc/chrony/chrony.conf
+  #     line: "allow"
+  #     insertbefore: BOF
+  #     state: present
+  # - name: restart chrony
+  #   service:
+  #     name: chrony
+  #     state: restarted
 
   roles:
     # Copy os repo
-    - { role: copy, src: /media/cdrom, dst: "{{ repos.path }}/{{ repos.os }}" }
+    # - { role: copy, src: /media/cdrom, dst: "{{ repos.path }}/{{ repos.os }}" }
     # A server for repo and preseeds distribution. There can be only one!
     # - lighttpd  # not present in Astra repo, not tested
     # - apache2   # not tested
@@ -41,6 +38,8 @@
     # Generate all preseeds from `preseeds.yml`
     - preseeds
     # MAC to IP mappings
-    - dnsmasq
+    # - dnsmasq
     # PXE configs
     - pxe
+    # Generate pre- and post-install scripts
+    # - scripts

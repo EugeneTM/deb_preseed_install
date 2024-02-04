@@ -1,0 +1,22 @@
+- name: set ssh key algorithms and a var for keys
+  set_fact:
+    ssh_keys: []
+    algorithms:
+      - rsa
+      - ed25519
+
+- name: generate ssh keys
+  command: "ssh-keygen -q -t {{ item }} -f {{ playbook_dir }}/output/keys/id_{{ item }} -P '' -C 'ansible_deployment'"
+  args:
+    creates: "{{ playbook_dir }}/output/keys/id_{{ item }}"
+  loop: "{{ algorithms }}"
+
+- name: add ssh keys to the var
+  set_fact:
+    ssh_keys: "{{ ssh_keys + [
+      lookup(
+        'file',
+        '{{ playbook_dir }}/output/keys/id_{{ item }}.pub'
+        )
+      ] }}"
+  loop: "{{ algorithms }}"

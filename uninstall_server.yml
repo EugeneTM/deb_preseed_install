@@ -1,22 +1,33 @@
-#
-# © ООО «Лаборатория 50», 2014
-#
----
-# uninstall server for preseed install OS
-
-- hosts: inst_servers
-#  user: root
+- hosts: localhost
+  user: root
+  become: false
   connection: local
-  sudo: True
-  vars_files: ['group_vars/all']
+  
+  vars_files:
+  # vars for the install server
+  - vars/server.yml
+  # vars for the client machines to install OS on
+  - vars/preseeds.yml
 
   tasks:
-    - name: удаление пакетов
-      apt: pkg={{ item }} state=absent purge=yes
-      with_items: [apache2, tftpd-hpa, dnsmasq, vsftpd]
+    - name: purge packages
+      apt:
+        pkg: "{{ item }}" 
+        state: absent
+        purge: yes
+      loop:
+        - apache2
+        - tftpd-hpa
+        - dnsmasq
+        - vsftpd
 
-#    - name: удаление ссылок на tftp
-#      file: path={{ link_to_tftp_files }} state=absent
+    - name: remove tftp and repo dirs
+    loop:
+      - "{{ repos.path }}"
+      - "{{ tftp.path }}"
+    file:
+      path: "{{ item }}"
+      state: absent
 
 #    - name: удаление ссылок на зеркало пакетов
 #      file: path={{ http.link_to_packages_mirror }} state=absent

@@ -1,13 +1,13 @@
-# Переменные для настройки сервера раздачи
+# vars for the deployment server
 
-# Необходимость UEFI. В любом случае допускается одновременное наличие обычных и UEFI целевых машин.
+# Is UEFI necessary. Only UEFI is supported for now
 uefi: True
 
-# Имя шаблона: объект в `preseeds.yml` для генерации шаблона из `preseed.j2. Отдельные файлы из `roles/common/templates` сейчас не используются.
+# Имя шаблона: объект в `preseeds.yml` для генерации шаблона из `preseed.j2`. Отдельные файлы вида `preseed.XYZ.cfg.j2` из `files/` сейчас не используются.
 
-default_preseed: 'standard'
-
+default_preseed: lvm
 default_domain: local
+default_gateway: 10.1.2.2
 
 # Пароли для Astra не короче 8 символов
 user:
@@ -56,9 +56,9 @@ target_machines:
 
 # IP назначаются тут
 machines_by_mac:
-  - { mac: ["BC:24:11:8E:C5:2E"], hostname: astra1, ip: 10.1.2.240, preseed: "{{ preseeds.standard }}" }
-  - { mac: ["BC:24:11:E5:26:80"], hostname: astra2, ip: 10.1.2.241, preseed: "{{ preseeds.standard }}" }
-  - { mac: ["BC:24:11:F6:5B:75"], hostname: astra3, ip: 10.1.2.242, preseed: "{{ preseeds.lvm }}" }
-  - { mac: ['00:25:90:cb:03:2b', '00:25:90:cb:03:2a', '90:e2:ba:21:35:60', '90:e2:ba:21:35:61'], hostname: 'hacnode1', ip: 172.16.0.20 }
+  - { mac: ["BC:24:11:8E:C5:2E"], hostname: astra1, ip: 10.1.2.240, preseed: lvm }
+  - { mac: ["BC:24:11:E5:26:80"], hostname: astra2, ip: 10.1.2.241, preseed: standard }
+  - { mac: ["BC:24:11:F6:5B:75"], hostname: astra3, ip: 10.1.2.242 }
+#   - { mac: ['00:25:90:cb:03:2b', '00:25:90:cb:03:2a', '90:e2:ba:21:35:60', '90:e2:ba:21:35:61'], hostname: 'hacnode1', ip: 172.16.0.20 }
 #  - { mac: ['00:1c:c0:f8:ff:6a'], hostname: 'crimea', preseed: 'preseeds.mdraid', ip: 172.16.0.100 }
 #  - { mac: '00-1c-c0-f8-ff-6a', hostname: 'example', preseed: 'preseeds.standard', ip: 10.10.10.50, mask: 255.255.255.0 }

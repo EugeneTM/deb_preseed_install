@@ -1,28 +1,47 @@
-#
-# © ООО «Лаборатория 50», 2014
-#
----
-# install&conf apache2
+- name: install apache2
+  apt: 
+    pkg: apache2
+    state: latest
 
-    - name: установка apache2
-      apt: pkg=apache2 state=latest
+- name: templating apache2 conf
+  template:
+    src: httpd.conf.j2
+    dest: /etc/apache2/httpd.conf
+    owner: www-data
+    group: www-data
+    mode: 0775
 
-    - name: корректировка конфигурационных файлов apache2
-      template: src=httpd.conf.j2 dest=/etc/apache2/httpd.conf owner=www-data group=www-data mode=0775
+- name: create a link to tftp boot files
+  file:
+    src: "{{ tftp.path }}" 
+    dest: /var/www/tftpboot
+    owner: www-data
+    group: www-data
+    mode: 0775
+    state: link
+    force: true
 
-    - name: создание ссылки на каталог с tftp файлами
-      file: src={{ tftp.path }} dest=/var/www/tftpboot
-            owner=www-data group=www-data mode=0775 state=link force=true
+- name: create a link to the repo
+  file:
+    src: "{{ repos.path }}"
+    dest: /var/www/repos
+    owner: www-data
+    group: www-data
+    mode: 0775
+    tate: link
+    force: true
 
-    - name: создание ссылок на зеркало
-      file: src={{ repos.path }} dest=/var/www/{{ server_repos }}
-            owner=www-data group=www-data mode=0775 state=link force=true
+- name: edit vhosts.conf
+  lineinfile:
+    dest: /etc/apache2/conf.d/vhosts.conf
+    state: present
+    regexp: "{{ inventory_hostname }}"
+    line: "ServerName $inventory_hostname"
+    owner: www-data
+    group: www-data
+    mode: 0775
 
-    - name: корректировка vhosts.conf
-      lineinfile:
-        dest=/etc/apache2/conf.d/vhosts.conf
-        state=present
-        regexp={{ inventory_hostname }}
-        line="ServerName $inventory_hostname"
-        owner=www-data group=www-data mode=0775
-
+- name: restart apache2
+  service:
+    name: apache2
+    state: restarted

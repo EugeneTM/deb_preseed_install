@@ -10,6 +10,10 @@
     owner: dnsmasq
     mode: 0755
 
+- name: debug
+  loop: "{{ preseeds | dict2items }}"
+  debug: msg={{item.key}}
+
 - name: compile preseeds from `preseed.j2` + `preseeds.yml`
   loop: "{{ preseeds | dict2items }}"
   template:

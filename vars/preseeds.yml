@@ -3,7 +3,8 @@ preseeds:
     name: standard
     os_name: astra
     interface: eth0
-    gateway: 10.1.2.2
+    # gateway:
+
     linux_image: linux-5.15-generic
     # partman-auto/method (raid, lvm, regular)
     partman: regular

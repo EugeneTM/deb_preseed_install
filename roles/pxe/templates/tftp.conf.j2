@@ -1,7 +1,10 @@
+# this is preseed {{ preseed_name }}
+
 DEFAULT {{ preseed.os_name }}
 
 LABEL {{ preseed.os_name }}
 	kernel linux
-	append auto=true initrd=initrd.gz debian-installer/language=ru astra-license/license=true net.ifnames=0 {% if host is defined %}hostname={{ host.hostname | default('any') }} domain={{ default_domain.upper() }} url={{ server_type }}://{{ network.addr }}/preseeds/{{ preseed.name }} interface={{ preseed.interface }} {% if host.ip is defined and host.ip %}netcfg/get_ipaddress={{ host.ip }} netcfg/get_netmask={{ host.mask | default(network.mask)}} netcfg/get_gateway={{ preseed.gateway | default(network.addr) }} netcfg/get_nameservers={{ network.addr }} netcfg/disable_dhcp=true{% else %}netcfg/choose_interface=auto netcfg/dhcp_timeout=60{% endif %}{% else %}hostname=any domain={{ default_domain.upper() }} url={{ server_type }}://{{ network.addr }}/preseeds/{{ default_preseed }} interface={{ preseed.interface }} netcfg/choose_interface=auto netcfg/dhcp_timeout=60{% endif %}
-
+	
+	append hostname={{ host.hostname | default('any') }} auto=true initrd=initrd.gz debian-installer/language=ru astra-license/license=true netcfg/dhcp_timeout=60 net.ifnames=0 interface={{ preseed.interface }} domain={{ default_domain }} {% if host is defined and host.ip is defined and host.ip %} url={{ server_type }}://{{ network.addr }}/preseeds/{{ preseed.name }} netcfg/get_ipaddress={{ host.ip }} netcfg/get_netmask={{ host.mask | default(network.mask)}} netcfg/get_gateway={{ preseed.gateway | default(default_gateway) }} netcfg/get_nameservers={{ network.addr }} netcfg/disable_dhcp=true	{% else %} url={{ server_type }}://{{ network.addr }}/preseeds/{{ default_preseed }} netcfg/choose_interface=auto {% endif %}
+		
 TIMEOUT 1
